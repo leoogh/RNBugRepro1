@@ -1,0 +1,19 @@
+{
+  "name": "react-native-calcturbo",
+  "version": "0.0.0",
+  "description": "calcturbo",
+  "main": "src/index",
+  "codegenConfig": {
+    "name": "RNCalcturboSpec",
+    "type": "modules",
+    "jsSrcsDir": "src"
+  },
+  "author": " <> ()",
+  "license": "UNLICENSED",
+  "homepage": "#readme",
+  "create-react-native-library": {
+    "type": "module-new",
+    "languages": "cpp",
+    "version": "0.44.2"
+  }
+}

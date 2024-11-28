@@ -5,9 +5,11 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState } from 'react';
+import type { PropsWithChildren } from 'react';
 import {
+  Alert,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -19,17 +21,18 @@ import {
 
 import {
   Colors,
-  DebugInstructions,
   Header,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import { multiply /* onValueChanged*/ } from 'react-native-calcturbo';
+//import { useEffect, useRef, useState } from 'react';
+
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
+function Section({ children, title }: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -57,6 +60,21 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [result, setResult] = useState<number | null>(null);
+  //const listenerSubscription = useRef<null | EventSubscription>(null);
+
+  /*
+  useEffect(() => {
+    listenerSubscription.current = onValueChanged((data: number) => { 
+      Alert.alert(`OnValueChanged fired with: ${data}`);
+    });
+
+    return () => {
+      listenerSubscription.current?.remove();
+      listenerSubscription.current = null;
+    }
+  }, [])
+  */
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -76,20 +94,18 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
+          <Section title="Please run on Android API 26">
           </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <View style={styles.view}>
+            <Pressable onPress={() => {
+              const v = multiply(2, 21);
+              setResult(v);
+            }}><Text style={styles.button}>Multiply 2 x 21 !</Text></Pressable>
+            <Text style={styles.text}>Result: {result}</Text>
+            <Pressable onPress={() => {
+              setResult(null);
+            }} ><Text style={styles.button}>Clear</Text></Pressable>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -97,6 +113,22 @@ function App(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  button: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'blue',
+  },
+  view: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: 20,
+    padding: 20,
+  },
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
