@@ -13,7 +13,7 @@ class CalcturboModule(reactContext: ReactApplicationContext) :
 
   override fun multiply(a: Double, b: Double): Double {
     val result = nativeMultiply(a, b)
-    //emitOnValueChanged(result)
+    emitOnValueChanged(result)
     return result
   }
 

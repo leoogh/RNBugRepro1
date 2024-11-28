@@ -5,7 +5,8 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RNCalcturboSpec.h"
 
-@interface Calcturbo : NSObject <NativeCalcturboSpec>
+@interface Calcturbo : NativeCalcturboSpecBase <NativeCalcturboSpec>
+//@interface Calcturbo : NSObject <NativeCalcturboSpec>
 #else
 #import <React/RCTBridgeModule.h>
 

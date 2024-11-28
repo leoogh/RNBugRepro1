@@ -7,7 +7,7 @@ RCT_EXPORT_MODULE()
 #ifdef RCT_NEW_ARCH_ENABLED
 - (NSNumber *)multiply:(double)a b:(double)b {
     NSNumber *result = @(calcturbo::multiply(a, b));
-
+    [self emitOnValueChanged:result];
     return result;
 }
 

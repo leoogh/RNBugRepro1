@@ -1,79 +1,41 @@
 # RNBugRepro1
 
-![Build](https://github.com/leoogh/RNBugRepro1/workflows/Pre%20Merge%20Checks/badge.svg)
+## Context:
+- this is a React Native reproducer app, demonstrating calling a C++ api from JS and custom JS events being emitted from the native side
+- app runs fine on Android API 27 (Oreo 8.1) and up
+- app also runs fine on iOS 18.x
+- app runs on React Native 0.76, with New Architecture enabled
+- the native turbo module was scaffolded using `npx create-react-native-library@latest react-native-calcturbo`
+- a custom event was then added following this doc: https://github.com/reactwg/react-native-new-architecture/blob/main/docs/turbo-modules.md
 
-This is your new React Native Reproducer project.
+## Bug report
+### Behavior
 
-# Reproducer TODO list
+- when deploying to an Android **API 26** simulator or device the app crashes upon startup with:
+  ```
+  java_vm_ext.cc:504] JNI DETECTED ERROR IN APPLICATION: JNI IsAssignableFrom called with pending exception java.lang.NoSuchMethodError: no non-static method "Lcom/calcturbo/CalcturboModule;.setEventEmitterCallback(Lcom/facebook/react/bridge/CxxCallbackImpl;)V"
+  ```
+### Remarks
+  - the crashes started happening when adding the support for events
+  - before events were added the app started just fine on API 26 and the native C++ functions could be called from JS
 
-- [x] 1. Create a new reproducer project.
-- [ ] 2. Git clone your repository locally.
-- [ ] 3. Edit the project to reproduce the failure you're seeing.
-- [ ] 4. Push your changes, so that Github Actions can run the CI.
-- [ ] 5. Make sure the repository is public and share the link with the issue you reported.
+### To reproduce on mac with android simulator
+  - prerequisites: Android SDK 35 was installed and RN apps can be built on your mac
 
-# How to use this Reproducer
+  - clone the git repo
 
-This project has been created with `npx @react-native-community/cli init` and is a vanilla React Native app.
+  - `cd ./ReproducerApp`
 
-> [!IMPORTANT]  
-> Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/set-up-your-environment) so that you have a working environment locally.
+  - if not installed yet, install yarn with `npm i -g yarn`
 
-## Step 1: Start the Metro Server
+  - `yarn`
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+  - start an android simulator with api 26 (Oreo 8.0)
 
-To start Metro, run the following command from the _root_ of your React Native project:
+  - `npx react-native run-android`
+    - should build and then crash the app on the simulator with errors mentioned above
 
-```bash
-# using npm
-npm start
+  - switch to another android simulator with api 27 (Oreo 8.1)
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### For iOS
-
-First, make sure you install dependencies with:
-
-```bash
-cd ios && bundle install && bundle exec pod install
-```
-
-Then you can run the iOS app with:
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+  - `npx react-native run-android`
+  - should build and run fine
